@@ -56,13 +56,13 @@ class AuthRepository
             case 'Teacher':
                 return Teacher::where('email', $email)->first();
             case 'Staff':
-                return Staff::where('username', $email)->first();
+                return Staff::where('email', $email)->first();
             case 'Admin':
-                return Admin::where('username', $email)->first();
+                return Admin::where('email', $email)->first();
             case 'Superadmin':
-                return Superadmin::where('username', $email)->first();
+                return Superadmin::where('email', $email)->first();
             default:
-                return User::where('username', $email)->first();
+                return User::where('email', $email)->first();
         }
     }
 
@@ -154,6 +154,13 @@ class AuthRepository
                 'email' => $user->email,
                 'role' => 'teacher', // Example: Add specific role or other attributes
             ];
+         } elseif ($user instanceof Staff) {
+            $userData['user'] = [
+                'id' => $user->id,
+                
+                'email' => $user->email,
+                'role' => 'staff', // Example: Add specific role or other attributes
+            ];     
         } elseif ($user instanceof Admin) {
             $userData['user'] = [
                 'id' => $user->id,
@@ -166,7 +173,7 @@ class AuthRepository
                 'id' => $user->id,
                 
                 'email' => $user->email,
-                'role' => 'admin', // Example: Add specific role or other attributes
+                'role' => 'super admin', // Example: Add specific role or other attributes
             ];    
         } else {
             // Default handling for generic User or other types
