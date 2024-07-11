@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: user_service
+    container_name: user_service
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./vendor:/var/www/vendor
+      - ./storage:/var/www/storage
+    networks:
+      - user_service_network
+
+  webserver:
+    image: nginx:alpine
+    container_name: user_service_nginx
+    restart: unless-stopped
+    ports:
+      - "90:80"
+    volumes:
+      - .:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - user_service_network
+
+  db:
+    image: mysql:5.7
+    container_name: user_service_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: h!t57VCcEhrX18*WL9
+      MYSQL_DATABASE: user_service
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - user_service_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: user_service_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: h!t57VCcEhrX18*WL9
+    ports:
+      - "8090:80"
+    networks:
+      - user_service_network
+
+networks:
+  user_service_network:
+
+volumes:
+  dbdata:
