@@ -17,7 +17,7 @@ class StaffController extends Controller
                 $token = $user->token();
                 $token->revoke();
                 $token->delete();
-                return response()->json(['message' => 'logged out successfully'], 200);
+                return response()->json(['status' => 200, 'message' => 'logged out successfully']);
             } else {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
