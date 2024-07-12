@@ -25,4 +25,18 @@ class StudentController extends Controller
             return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
+
+    public function checkAuth(): JsonResponse
+    {
+        try {
+            $user = Auth::guard('student')->user();
+            if ($user) {
+                return response()->json(['status' => 200, 'message' => 'Authorized']);
+            } else {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
+    }
 }
