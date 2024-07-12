@@ -28,6 +28,13 @@ Route::middleware('auth:admin')->post('admin/logout', [AdminController::class, '
 Route::middleware('auth:superadmin')->post('super-admin/logout', [SuperAdminController::class, 'logout']);
 
 
+Route::middleware('auth:student')->get('student/check-auth', [StudentController::class, 'checkAuth']);
+Route::middleware('auth:teacher')->get('teacher/check-auth', [TeacherController::class, 'checkAuth']);
+Route::middleware('auth:staff')->get('staff/check-auth', [StaffController::class, 'checkAuth']);
+Route::middleware('auth:admin')->get('admin/check-auth', [AdminController::class, 'checkAuth']);
+Route::middleware('auth:superadmin')->get('super-admin/check-auth', [SuperAdminController::class, 'checkAuth']);
+
+
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/password/reset/request', [PasswordResetController::class, 'requestPasswordReset']);

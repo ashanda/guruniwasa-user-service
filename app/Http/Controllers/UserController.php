@@ -14,7 +14,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = Auth::user();;
+        $users = Auth::user();
         try{
             return $this->responseSuccess($users, 'dashboard', 200);
         }catch(Exception $e){
