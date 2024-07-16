@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('school');
             $table->string('district');
             $table->string('city');
-            $table->string('parent_phone')->unique();
+            $table->string('parent_phone');
             $table->string('avatar')->nullable();
             $table->integer('status')->default(0);
             $table->rememberToken();

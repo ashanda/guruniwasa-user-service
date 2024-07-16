@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Admin;
 use App\Models\Staff;
 use App\Models\Student;
+use App\Models\StudentSubject;
 use App\Models\Superadmin;
 use App\Models\Teacher;
 use App\Models\User;
@@ -44,6 +45,25 @@ class AuthRepository
         }
 
         $tokenInstance = $this->createAuthToken($user, 'User'); // Default to 'User'
+
+        return $this->getAuthData($user, $tokenInstance);
+    }
+
+    public function Studentregister(array $data): array
+    {
+        $user = Student::create($this->prepareDataForRegistrationstudent($data));
+
+        
+        
+        if (!$user) {
+            throw new Exception("Sorry, Student was not registered. Please try again.", 404);
+        }
+        $studentSubjects = StudentSubject::create([
+            'student_id' => $user->id,
+            'subject_ids' => $data['subject']
+        ]);
+
+        $tokenInstance = $this->createAuthToken($user, 'Student'); // Default to 'User'
 
         return $this->getAuthData($user, $tokenInstance);
     }
@@ -196,6 +216,26 @@ class AuthRepository
             'password' => Hash::make($data['password']),
         ];
     }
+
+    public function prepareDataForRegistrationStudent(array $data): array
+    {
+        return [
+            'username' => $data['username'],
+            'password' => Hash::make($data['password']),
+            'full_name' => $data['full_name'],
+            'student_code' => $data['student_code'],
+            'birthday' => $data['birthday'],
+            'gender' => $data['gender'],
+            'address' => $data['address'],
+            'school' => $data['school'],
+            'district' => $data['district'],
+            'city' => $data['city'],
+            'parent_phone' => $data['parent_phone'],
+            'grade' => $data['grade'],
+           
+        ];
+    }
+    
 
     public function createPasswordResetToken(User $user): string
     {
