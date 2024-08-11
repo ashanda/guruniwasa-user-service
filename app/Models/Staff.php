@@ -4,35 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
 class Staff extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-     protected $fillable = [
-        'name',
-        'email',
-        'password',
+    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    protected $fillable = [
+        'photo', 'name', 'gender', 'contact_no', 'second_contact_no', 'birthday', 'nic_no', 'address', 'basic', 'fixed_allowance', 'working_days_and_hours', 'email', 'password'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    protected $dates = ['deleted_at'];
+
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
 }

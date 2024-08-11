@@ -31,7 +31,17 @@ class StudentController extends Controller
         try {
             $user = Auth::guard('student')->user();
             if ($user) {
-                return response()->json(['status' => 200, 'message' => 'Authorized']);
+                // Load the student_subjects relationship
+                $user->load(['subjects' => function($query) {
+                    $query->select('student_id', 'subject_ids', 'status');
+                }]);
+
+                // Decode the subject_ids for each student subject
+                $user->subjects->each(function($subjects) {
+                    $subjects->subject_ids = json_decode($subjects->subject_ids);
+                });
+
+                return response()->json(['status' => 200, 'message' => 'Authorized', 'data' => $user]);
             } else {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
