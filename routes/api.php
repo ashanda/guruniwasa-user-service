@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AttendnceMarkController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProfileController;
@@ -10,9 +11,11 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentSubjectController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeacherSubjectController;
 use App\Http\Controllers\UserController;
 use App\Models\StudentSubject;
 use App\Models\Superadmin;
+use App\Models\TeacherSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +36,17 @@ Route::middleware('auth:superadmin')->post('super-admin/logout', [SuperAdminCont
 Route::middleware('auth:student')->get('student/check-auth', [StudentController::class, 'checkAuth']);
 Route::middleware('auth:teacher')->get('teacher/check-auth', [TeacherController::class, 'checkAuth']);
 Route::middleware('auth:staff')->get('staff/check-auth', [StaffController::class, 'checkAuth']);
+
+Route::middleware('auth:superadmin')->group(function () {
+    Route::get('staff/trashed', [StaffController::class, 'trashed'])->name('staff.trashed');
+    Route::post('staff/restore/{id}', [StaffController::class, 'restore'])->name('staff.restore');
+    Route::delete('staff/force-delete/{id}', [StaffController::class, 'forceDelete'])->name('staff.forceDelete');
+    Route::Resource('staff', StaffController::class);
+
+
+    Route::resource('teachers', TeacherController::class);
+});
+
 Route::middleware('auth:admin')->get('admin/check-auth', [AdminController::class, 'checkAuth']);
 Route::middleware('auth:superadmin')->get('super-admin/check-auth', [SuperAdminController::class, 'checkAuth']);
 
@@ -50,6 +64,9 @@ Route::get('/test-insert-performance',  [LoginController::class,'testInsertPerfo
 
 
 Route::middleware('auth:student')->get('/live-lesson', [StudentSubjectController::class, 'liveLessons']);
+Route::middleware('auth:teacher')->get('/live-lesson-teacher', [TeacherSubjectController::class, 'liveLessons']);
+Route::middleware(['auth:teacher'])->post('/attendence', [AttendnceMarkController::class, 'attendence']);
+
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index']);

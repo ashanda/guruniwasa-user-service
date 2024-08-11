@@ -13,11 +13,20 @@ return new class extends Migration
     {
         Schema::create('staff', function (Blueprint $table) {
             $table->id();
+            $table->string('photo')->nullable();
             $table->string('name');
+            $table->string('gender');
+            $table->string('contact_no');
+            $table->string('second_contact_no')->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('nic_no');
+            $table->text('address')->nullable();
+            $table->decimal('basic', 8, 2);
+            $table->decimal('fixed_allowance', 8, 2)->nullable();
+            $table->string('working_days_and_hours')->nullable();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

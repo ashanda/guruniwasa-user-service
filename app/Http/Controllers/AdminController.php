@@ -31,7 +31,7 @@ class AdminController extends Controller
         try {
             $user = Auth::guard('admin')->user();
             if ($user) {
-                return response()->json(['status' => 200, 'message' => 'Authorized']);
+                return response()->json(['status' => 200, 'message' => 'Authorized', 'data' => $user]);
             } else {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }

@@ -35,4 +35,9 @@ class Admin extends Model
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
 }

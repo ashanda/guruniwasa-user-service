@@ -52,4 +52,9 @@ class Student extends Model
     {
         return 'id';
     }
+
+    public function subjects()
+    {
+        return $this->hasMany(StudentSubject::class, 'student_id');
+    }
 }
