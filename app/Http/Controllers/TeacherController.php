@@ -88,6 +88,19 @@ class TeacherController extends Controller
         return response()->json(['status' => 200, 'data' => $teacher]);
     }
 
+    public function showTeacher($id): JsonResponse
+    {
+        $teacher = Teacher::find($id);
+
+        if (!$teacher) {
+            return response()->json(['status' => 404, 'message' => 'Teacher not found']);
+        }
+
+        
+
+        return response()->json(['status' => 200, 'data' => $teacher]);
+    
+    }
     public function update(Request $request, $id): JsonResponse
     {
         $teacher = Teacher::find($id);
@@ -183,6 +196,14 @@ class TeacherController extends Controller
         try {
             $user = Auth::guard('teacher')->user();
             if ($user) {
+                $user->load(['subjects' => function($query) {
+                    $query->select('teacher_id', 'subject_ids', 'status');
+                }]);
+
+                // Decode the subject_ids for each teacher subject
+                $user->subjects->each(function($subjects) {
+                    $subjects->subject_ids = json_decode($subjects->subject_ids);
+                });
                 return response()->json(['status' => 200, 'message' => 'Authorized', 'data' => $user]);
             } else {
                 return response()->json(['message' => 'Unauthorized'], 401);
@@ -191,4 +212,19 @@ class TeacherController extends Controller
             return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
+
+
+    public function getTeacher(Request $request){
+
+        $teacher = Teacher::where('id',$request->teacher_id)->first();
+
+            if (!$teacher) {
+                return response()->json(['status' => 404, 'message' => 'Teacher not found']);
+            }
+
+            
+
+            return response()->json(['status' => 200, 'data' => $teacher]);
+    }
+
 }

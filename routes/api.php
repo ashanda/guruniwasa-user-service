@@ -47,6 +47,9 @@ Route::middleware('auth:superadmin')->group(function () {
     Route::resource('teachers', TeacherController::class);
 });
 
+Route::get('teacher/data/{id}', [TeacherController::class,'showTeacher'])->name('teacher.showTeacher');
+
+
 Route::middleware('auth:admin')->get('admin/check-auth', [AdminController::class, 'checkAuth']);
 Route::middleware('auth:superadmin')->get('super-admin/check-auth', [SuperAdminController::class, 'checkAuth']);
 
@@ -61,12 +64,13 @@ Route::post('/password/reset/request', [PasswordResetController::class, 'request
 Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
 Route::get('/test-insert-performance',  [LoginController::class,'testInsertPerformance']);
 
-
+Route::get('/get-teacher',[TeacherController::class,'getTeacher']);
 
 Route::middleware('auth:student')->get('/live-lesson', [StudentSubjectController::class, 'liveLessons']);
 Route::middleware('auth:teacher')->get('/live-lesson-teacher', [TeacherSubjectController::class, 'liveLessons']);
 Route::middleware(['auth:teacher'])->post('/attendence', [AttendnceMarkController::class, 'attendence']);
 
+Route::middleware(['auth:teacher'])->get('/student-subject-with-count', [TeacherSubjectController::class, 'studentSubjectWithCount']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index']);
