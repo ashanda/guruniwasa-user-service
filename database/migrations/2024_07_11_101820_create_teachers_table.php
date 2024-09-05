@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_id')->unique();
             $table->string('name');
-            $table->string('subject');
-            $table->string('grades');
-            $table->string('medium');
+            $table->json('grades')->nullable()->change();
             $table->string('address');
             $table->string('district');
             $table->string('town');

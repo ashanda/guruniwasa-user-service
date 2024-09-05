@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentReviewController;
 use App\Http\Controllers\StudentSubjectController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TeacherController;
@@ -55,6 +56,8 @@ Route::middleware('auth:superadmin')->get('super-admin/check-auth', [SuperAdminC
 
 //student register
 Route::post('/student-register', [RegisterController::class, 'Studentregister']);
+Route::post('/teacher-register', [RegisterController::class, 'Teacherregister']);
+
 
 
 
@@ -66,9 +69,17 @@ Route::get('/test-insert-performance',  [LoginController::class,'testInsertPerfo
 
 Route::get('/get-teacher',[TeacherController::class,'getTeacher']);
 
+Route::get('/single-student', [StudentController::class, 'singleStudent']);
+Route::get('/single-teacher', [TeacherController::class, 'singleTeacher']);
+
 Route::middleware('auth:student')->get('/live-lesson', [StudentSubjectController::class, 'liveLessons']);
 Route::middleware('auth:teacher')->get('/live-lesson-teacher', [TeacherSubjectController::class, 'liveLessons']);
 Route::middleware(['auth:teacher'])->post('/attendence', [AttendnceMarkController::class, 'attendence']);
+
+Route::middleware('auth:student')->post('/student-subject-remove', [StudentSubjectController::class, 'studentSubjectRemove']);
+Route::middleware('auth:student')->post('/student-subject-add', [StudentSubjectController::class, 'studentSubjectAdd']);
+
+Route::middleware('auth:student')->get('teacher-review', [StudentReviewController::class, 'getTeacherSubjects']);
 
 Route::middleware(['auth:teacher'])->get('/student-subject-with-count', [TeacherSubjectController::class, 'studentSubjectWithCount']);
 
