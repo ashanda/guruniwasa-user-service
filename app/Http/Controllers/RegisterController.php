@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\RegisterRequestStudent;
+use App\Http\Requests\RegisterRequestTeacher;
 use App\Repositories\AuthRepository;
 use App\Traits\ResponseTrait;
 use Exception;
@@ -40,5 +41,16 @@ class RegisterController extends Controller
             return $this->responseError([], $exception->getMessage(),401);
         }
     }
+
+    public function Teacherregister(RegisterRequestTeacher $request){
+         try {
+            $data = $this->auth->Teacherregister($request->all());
+
+            return $this->responseSuccess($data, 'User created successfully.',201);
+        } catch (Exception $exception) {
+            return $this->responseError([], $exception->getMessage(),401);
+        }
+    }
+    
 
 }

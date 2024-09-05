@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TeacherSubject extends Model
+class StudentReview extends Model
 {
     use HasFactory;
     protected $fillable = [
         'student_id',
-        'subject_ids',
-        'status',
+        'teacher_id',
+        'subject_id',
+        'review',
+        'rating',
 
     ];
 
-    public function review(){
-
-        return $this->hasMany(StudentReview::class, 'teacher_id', 'teacher_id');
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function teacher()

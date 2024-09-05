@@ -28,8 +28,6 @@ class TeacherController extends Controller
             'user_id' => 'required|unique:teachers',
             'name' => 'required',
             'grades' => 'required|array',
-            'subjects' => 'required|array',
-            'medium' => 'required',
             'address' => 'required',
             'district' => 'required',
             'town' => 'required',
@@ -113,8 +111,6 @@ class TeacherController extends Controller
             'user_id' => 'required|unique:teachers,user_id,' . $teacher->id,
             'name' => 'required',
             'grades' => 'required|array',
-            'subjects' => 'required|array',
-            'medium' => 'required',
             'address' => 'required',
             'district' => 'required',
             'town' => 'required',
@@ -225,6 +221,18 @@ class TeacherController extends Controller
             
 
             return response()->json(['status' => 200, 'data' => $teacher]);
+    }
+
+
+    public function singleTeacher(Request $request){
+
+        $request->validate([
+            'teacher_id' => 'required',
+        ]);
+
+        $data = Teacher::where('id', $request->teacher_id)->first();
+        
+        return response()->json(['status' => 200, 'message' => 'Requested Teacher', 'data' => $data]);
     }
 
 }

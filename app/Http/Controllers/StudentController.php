@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class StudentController extends Controller
 {
@@ -49,4 +51,17 @@ class StudentController extends Controller
             return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
+
+    public function singleStudent(Request $request){
+        Log::alert($request->all());
+        $request->validate([
+            'student_id' => 'required',
+        ]);
+
+        $data = Student::where('id', $request->student_id)->first();
+        return response()->json(['status' => 200, 'message' => 'Requested Student', 'data' => $data]);
+
+    }
+
+    
 }
