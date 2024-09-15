@@ -5,14 +5,17 @@ namespace App\Repositories;
 use App\Models\Admin;
 use App\Models\Staff;
 use App\Models\Student;
+use App\Models\StudentSubject;
 use App\Models\Superadmin;
 use App\Models\Teacher;
+use App\Models\TeacherSubject;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Illuminate\Support\Str;
 
@@ -48,6 +51,44 @@ class AuthRepository
         return $this->getAuthData($user, $tokenInstance);
     }
 
+    public function Studentregister(array $data): array
+    {
+        $user = Student::create($this->prepareDataForRegistrationstudent($data));
+
+        
+        
+        if (!$user) {
+            throw new Exception("Sorry, Student was not registered. Please try again.", 404);
+        }
+        $studentSubjects = StudentSubject::create([
+            'student_id' => $user->id,
+            'subject_ids' => $data['subject']
+        ]);
+
+        $tokenInstance = $this->createAuthToken($user, 'Student'); // Default to 'User'
+
+        return $this->getAuthData($user, $tokenInstance);
+    }
+
+
+    public function Teacherregister(array $data): array
+    {
+        $user = Teacher::create($this->prepareDataForRegistrationteacher($data));
+
+        
+        
+        if (!$user) {
+            throw new Exception("Sorry, Teacher was not registered. Please try again.", 404);
+        }
+        // $studentSubjects = TeacherSubject::create([
+        //     'teacher_id' => $user->id,
+        //     'subject_ids' => $data['subject']
+        // ]);
+
+        $tokenInstance = $this->createAuthToken($user, 'Teacher'); // Default to 'User'
+
+        return $this->getAuthData($user, $tokenInstance);
+    }
     public function getUserByEmail(string $email, string $tag)
     {
         switch ($tag) {
@@ -196,6 +237,46 @@ class AuthRepository
             'password' => Hash::make($data['password']),
         ];
     }
+
+    public function prepareDataForRegistrationStudent(array $data): array
+    {
+        return [
+            'username' => $data['username'],
+            'password' => Hash::make($data['password']),
+            'full_name' => $data['full_name'],
+            'student_code' => $data['student_code'],
+            'birthday' => $data['birthday'],
+            'gender' => $data['gender'],
+            'address' => $data['address'],
+            'school' => $data['school'],
+            'district' => $data['district'],
+            'city' => $data['city'],
+            'parent_phone' => $data['parent_phone'],
+            'grade' => $data['grade'],
+           
+        ];
+    }
+
+    public function prepareDataForRegistrationteacher(array $data): array
+    {
+           $grades = !empty($data['grades']) ? json_encode($data['grades']) : json_encode([]);
+
+        return [
+
+            'user_id' => $data['user_id'],
+            'name' => $data['name'],
+            'grades' => $grades,
+            'address' => $data['address'],
+            'district' => $data['district'],
+            'town' =>$data['town'],
+            'contact_no' => $data['contact_no'],
+            'secondary_contact_no' => $data['secondary_contact_no'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+           
+        ];
+    }
+    
 
     public function createPasswordResetToken(User $user): string
     {

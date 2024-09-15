@@ -31,7 +31,7 @@ class SuperAdminController extends Controller
         try {
             $user = Auth::guard('superadmin')->user();
             if ($user) {
-                return response()->json(['status' => 200, 'message' => 'Authorized']);
+                return response()->json(['status' => 200, 'message' => 'Authorized', 'data' => $user]);
             } else {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }

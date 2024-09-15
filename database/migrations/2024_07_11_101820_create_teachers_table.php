@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id')->unique();
             $table->string('name');
+            $table->json('grades')->nullable()->change();
+            $table->string('address');
+            $table->string('district');
+            $table->string('town');
+            $table->string('contact_no');
+            $table->string('secondary_contact_no')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
