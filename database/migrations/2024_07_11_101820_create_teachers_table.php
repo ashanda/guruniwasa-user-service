@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('user_id')->unique();
             $table->string('name');
-            $table->json('grades')->nullable()->change();
             $table->string('address');
             $table->string('district');
             $table->string('town');
             $table->string('contact_no');
+            $table->string('birth_date');
+            $table->string('retention');
             $table->string('secondary_contact_no')->nullable();
             $table->string('email')->unique();
+            $table->string('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->timestamps();

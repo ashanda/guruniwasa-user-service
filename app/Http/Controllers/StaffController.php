@@ -21,6 +21,8 @@ class StaffController extends Controller
     {
         $this->staff = $staff;
     }
+
+    
     public function logout(): JsonResponse
     {
         try {

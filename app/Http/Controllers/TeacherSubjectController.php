@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentSubject;
+use App\Models\Teacher;
 use App\Models\TeacherSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,4 +40,26 @@ class TeacherSubjectController extends Controller
             'student_count' => $studentCount
         ]);
         }
+
+
+      public function teacherSubjectUpdate(Request $request){
+          $teacherSubjects = TeacherSubject::where('teacher_id', $request->tid)->get();
+          if ($teacherSubjects->isEmpty()) {
+            // No records found
+            TeacherSubject::create([
+                'teacher_id' => $request->tid,
+                'subject_ids' => json_encode($request->related_subject_ids),
+            ]);
+        } else {
+            // Records exist
+            TeacherSubject::where('teacher_id', $request->tid)->update([
+                'subject_ids' => json_encode($request->related_subject_ids),
+            ]);
+            return response()->json([
+                'message' => 'Subjects found for the teacher.',
+                'data' => $teacherSubjects
+            ], 200);
+        }
+          
+      }  
 }

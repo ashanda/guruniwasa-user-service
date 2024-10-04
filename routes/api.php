@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentReviewController;
@@ -59,6 +60,9 @@ Route::post('/student-register', [RegisterController::class, 'Studentregister'])
 Route::post('/teacher-register', [RegisterController::class, 'Teacherregister']);
 
 
+Route::post('/teacher-related-subject', [TeacherSubjectController::class, 'teacherSubjectUpdate']);
+
+
 
 
 
@@ -68,6 +72,7 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 Route::get('/test-insert-performance',  [LoginController::class,'testInsertPerformance']);
 
 Route::get('/get-teacher',[TeacherController::class,'getTeacher']);
+Route::get('/all-teacher',[TeacherController::class,'index']);
 
 Route::get('/single-student', [StudentController::class, 'singleStudent']);
 Route::get('/single-teacher', [TeacherController::class, 'singleTeacher']);
@@ -82,6 +87,13 @@ Route::middleware('auth:student')->post('/student-subject-add', [StudentSubjectC
 Route::middleware('auth:student')->get('teacher-review', [StudentReviewController::class, 'getTeacherSubjects']);
 
 Route::middleware(['auth:teacher'])->get('/student-subject-with-count', [TeacherSubjectController::class, 'studentSubjectWithCount']);
+Route::get('/student-search', [SearchController::class, 'studentSearch']);
+Route::get('/teacher-search', [SearchController::class, 'teacherSearch']);
+
+Route::get('/all-staff', [StaffController::class, 'index']);
+
+
+
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index']);

@@ -8,17 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
 {
     public function index(): JsonResponse
     {
-        $teachers = Teacher::all();
-        foreach ($teachers as $teacher) {
-            $teacher->grades = DB::table('grade_teacher')->where('teacher_id', $teacher->id)->pluck('grade_id');
-            $teacher->subjects = DB::table('subject_teacher')->where('teacher_id', $teacher->id)->pluck('subject_id');
-        }
+        $teachers = Teacher::with('subjects')->get();
+
         return response()->json(['status' => 200, 'data' => $teachers]);
     }
 
