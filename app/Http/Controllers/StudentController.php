@@ -58,7 +58,7 @@ class StudentController extends Controller
             'student_id' => 'required',
         ]);
 
-        $data = Student::where('id', $request->student_id)->first();
+        $data = Student::where('id', $request->student_id)->with('subjects')->first();
         return response()->json(['status' => 200, 'message' => 'Requested Student', 'data' => $data]);
 
     }
